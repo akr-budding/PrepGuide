@@ -1,0 +1,36 @@
+import { Topic } from '../models/question.model';
+
+export const API_TOPIC: Topic = {
+  key: 'api', label: 'Web API & Auth', icon: '🔐',
+  tip: 'JWT + RBAC you built yourself. Revise PUT vs PATCH, API versioning, CORS, middleware order.',
+  questions: [
+    { q: 'What is JWT? How does auth work?', tag: 'med',
+      say: 'JWT = token with 3 parts: header (algorithm), payload (userId, role, expiry), signature (tamper-proof).\n\nFlow: login → server creates JWT → client stores it → sends in every request header → server validates signature and trusts claims inside.',
+      note: 'JWT is stateless — server stores nothing. All info is in the token.',
+      mem: 'JWT = digital ID card. Server checks it without a DB lookup.' },
+    { q: 'PUT vs PATCH — what\'s the difference?', tag: 'easy',
+      say: 'PUT: replace the ENTIRE resource. You send all fields — missing fields get nulled out. Like overwriting a whole record.\n\nPATCH: update only the SPECIFIC fields you send. Everything else stays the same.\n\nReal-world: if user updates only their phone number — use PATCH. Sending a PUT would wipe out all other fields you didn\'t include.',
+      note: 'PUT = replace everything. PATCH = update only what you send. PATCH is more common in practice.',
+      mem: 'PUT = full replace. PATCH = partial update. Prefer PATCH for small updates.' },
+    { q: 'What is API versioning and how do you handle it?', tag: 'med',
+      say: 'API versioning lets you change your API without breaking existing clients who use the old version.\n\nMost common approach: URL versioning — /api/v1/employees and /api/v2/employees run side by side.\n\nIn .NET: use the Asp.Versioning NuGet package. Mark controllers with [ApiVersion(\'2.0\')].\n\nKey point: deprecate old versions with a sunset period — don\'t just delete them.',
+      note: 'URL versioning = most visible and simple. Used in most enterprise APIs.',
+      mem: 'Versioning = don\'t break old clients. URL versioning = /api/v1/ most common.' },
+    { q: 'What is CORS and why does it matter?', tag: 'med',
+      say: 'CORS = Cross-Origin Resource Sharing. Browser blocks requests from one domain to another by default for security.\n\nExample: Angular app on localhost:4200 calling API on localhost:5000 — browser blocks it by default.\n\nFix in ASP.NET Core: configure CORS policy in Program.cs to allow specific origins, methods, and headers.\n\nIn production: never use AllowAnyOrigin() — always specify exact domains.',
+      note: 'CORS = browser security. Your Angular app needs to be whitelisted in the API to talk to it.',
+      mem: 'CORS = browser blocks cross-domain calls. Whitelist your frontend domain in the API.' },
+    { q: 'app.Use() vs app.Run() vs app.Map() in middleware?', tag: 'med',
+      say: 'app.Use(): adds middleware that can call the next middleware in the pipeline. Most common.\n\napp.Run(): terminal middleware — stops the pipeline, never calls next. Used at the end.\n\napp.Map(): branches the pipeline based on the request path.\n\nOrder matters: if you put authentication middleware after your controller middleware — auth never runs for those routes.',
+      note: 'Use = pass through. Run = stop here. Map = branch by path. Order is everything.',
+      mem: 'Use = chain. Run = terminal. Map = branch. Wrong order = broken pipeline.' },
+    { q: 'What is the difference between authentication and authorization?', tag: 'easy',
+      say: 'Authentication = who are you? Proving identity. JWT handles this.\nAuthorization = what can you do? RBAC handles this.\n\nIn our app: JWT = authentication. Manager can approve payroll, employee can only view own payslip = authorization.',
+      note: 'Auth-N = identity. Auth-Z = permissions. N before Z = same order as the process.',
+      mem: 'AuthN = who. AuthZ = what. JWT + RBAC covers both.' },
+    { q: 'REST API best practices?', tag: 'easy',
+      say: 'GET=read, POST=create, PUT=full replace, PATCH=partial update, DELETE=remove.\nStatus codes: 200 OK, 201 Created, 400 Bad Request, 401 Unauthorized, 404 Not Found, 500 Server Error.\nVersion your API. Return consistent error format — ProblemDetails standard.\nAlways validate server-side.',
+      note: 'Common mistake: returning 200 with error message in body. Use correct status codes.',
+      mem: 'Verbs + status codes + versioning + consistent errors = good REST API.' },
+  ]
+};

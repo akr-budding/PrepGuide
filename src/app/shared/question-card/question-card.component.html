@@ -1,0 +1,39 @@
+<div class="card" [class.open]="open()" [class.reviewed]="reviewed" (click)="toggle()">
+  <div class="card-left-bar"></div>
+
+  <div class="card-header">
+    <div class="card-title">
+      <span class="qtag" [class]="question.tag">{{ question.tag }}</span>
+      <span class="qtext">{{ question.q }}</span>
+    </div>
+    <div class="card-actions">
+      <button class="review-btn" [class.active]="reviewed" (click)="toggleReviewed($event)" [title]="reviewed ? 'Mark unreviewed' : 'Mark reviewed'">
+        {{ reviewed ? '✓' : '○' }}
+      </button>
+      <span class="chev">▼</span>
+    </div>
+  </div>
+
+  @if (open()) {
+    <div class="card-body" (click)="$event.stopPropagation()">
+      <div class="box say">
+        <div class="lbl">💬 Say this</div>
+        <div class="txt">{{ question.say }}</div>
+      </div>
+      <div class="box note">
+        <div class="lbl">🧠 How to think</div>
+        <div class="txt">{{ question.note }}</div>
+      </div>
+      <div class="box mem">
+        <div class="lbl">⚡ Memory hook</div>
+        <div class="txt">{{ question.mem }}</div>
+      </div>
+      @if (question.code) {
+        <div class="box code-box">
+          <div class="lbl">💡 Code</div>
+          <pre><code>{{ question.code }}</code></pre>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,38 @@
+@if (topic) {
+  <div class="topic-page">
+    <div class="topic-header">
+      <div class="topic-title-row">
+        <span class="topic-icon">{{ topic.icon }}</span>
+        <h1 class="topic-title">{{ topic.label }}</h1>
+        @if (reviewedCount > 0) {
+          <span class="reviewed-badge">{{ reviewedCount }}/{{ topic.questions.length }} reviewed</span>
+        }
+      </div>
+      <div class="tip">{{ topic.tip }}</div>
+    </div>
+
+    <div class="toolbar">
+      <div class="filters">
+        <button class="filter-btn" [class.active]="filter() === 'all'" (click)="setFilter('all')">All</button>
+        <button class="filter-btn easy" [class.active]="filter() === 'easy'" (click)="setFilter('easy')">Easy</button>
+        <button class="filter-btn med"  [class.active]="filter() === 'med'"  (click)="setFilter('med')">Med</button>
+        <button class="filter-btn hard" [class.active]="filter() === 'hard'" (click)="setFilter('hard')">Hard</button>
+      </div>
+      <label class="toggle-reviewed">
+        <input type="checkbox" [checked]="showReviewed()" (change)="showReviewed.set(!showReviewed())">
+        <span>Show reviewed</span>
+      </label>
+    </div>
+
+    <div class="questions">
+      @for (q of filtered(); track q.q) {
+        <app-question-card [question]="q" [topicKey]="topic.key" [index]="filteredIndex(q)" />
+      }
+      @if (filtered().length === 0) {
+        <div class="empty">No questions match the current filter.</div>
+      }
+    </div>
+  </div>
+} @else {
+  <div class="not-found">Topic not found.</div>
+}

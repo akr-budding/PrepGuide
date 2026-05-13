@@ -1,0 +1,37 @@
+<aside class="sidebar" [class.collapsed]="collapsed()">
+  <div class="sidebar-top">
+    <div class="brand" [class.hidden]="collapsed()">
+      <span class="brand-icon">📋</span>
+      <span class="brand-name">PrepGuide</span>
+    </div>
+    <button class="collapse-btn" (click)="toggle()" [title]="collapsed() ? 'Expand' : 'Collapse'">
+      {{ collapsed() ? '»' : '«' }}
+    </button>
+  </div>
+
+  <a class="nav-item search-link" routerLink="/search" routerLinkActive="active" [title]="collapsed() ? 'Search' : ''">
+    <span class="nav-icon">🔍</span>
+    <span class="nav-label" [class.hidden]="collapsed()">Search</span>
+  </a>
+
+  <div class="nav-divider" [class.hidden]="collapsed()"><span>Topics</span></div>
+
+  @for (topic of data.topics; track topic.key) {
+    <a class="nav-item" [routerLink]="['/topic', topic.key]" routerLinkActive="active" [title]="collapsed() ? topic.label : ''">
+      <span class="nav-icon">{{ topic.icon }}</span>
+      @if (!collapsed()) {
+        <span class="nav-label">{{ topic.label }}</span>
+        @if (progress.countForTopic(topic.key) > 0) {
+          <span class="progress-badge">{{ progress.countForTopic(topic.key) }}/{{ topic.questions.length }}</span>
+        }
+      }
+    </a>
+  }
+
+  <div class="sidebar-footer">
+    <button class="theme-btn" (click)="theme.toggle()" [title]="theme.isDark() ? 'Light mode' : 'Dark mode'">
+      <span>{{ theme.isDark() ? '☀️' : '🌙' }}</span>
+      <span class="nav-label" [class.hidden]="collapsed()">{{ theme.isDark() ? 'Light' : 'Dark' }}</span>
+    </button>
+  </div>
+</aside>

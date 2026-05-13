@@ -1,0 +1,25 @@
+import { Component, signal } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { DataService } from '../../core/services/data.service';
+import { ProgressService } from '../../core/services/progress.service';
+import { ThemeService } from '../../core/services/theme.service';
+
+@Component({
+  selector: 'app-sidebar',
+  standalone: true,
+  imports: [CommonModule, RouterLink, RouterLinkActive],
+  templateUrl: './sidebar.component.html',
+  styleUrl: './sidebar.component.scss'
+})
+export class SidebarComponent {
+  collapsed = signal(false);
+
+  constructor(
+    public data: DataService,
+    public progress: ProgressService,
+    public theme: ThemeService
+  ) {}
+
+  toggle() { this.collapsed.set(!this.collapsed()); }
+}
